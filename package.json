@@ -15,5 +15,10 @@
   "bugs": {
     "url": "https://github.com/Land-DAO/land-dao-floor-js/issues"
   },
-  "homepage": "https://github.com/Land-DAO/land-dao-floor-js#readme"
+  "homepage": "https://github.com/Land-DAO/land-dao-floor-js#readme",
+  "dependencies": {
+    "axios": "^0.21.4",
+    "discord.js": "^13.1.0",
+    "dotenv": "^10.0.0"
+  }
 }
