@@ -2,9 +2,12 @@ require('dotenv').config()
 
 const axios = require('axios')
 const { Client, Intents } = require('discord.js');
-const client = new Client({ intents: [Intents.FLAGS.GUILDS] });
+const { REST } = require('@discordjs/rest');
+const { Routes } = require('discord-api-types/v9');
 
 const { DISCORD_TOKEN, REFRESH_TIMER } = process.env
+
+const client = new Client({ intents: [Intents.FLAGS.GUILDS] });
 
 const getFloorPrice = async () => {
   const floorPrice = (
@@ -16,8 +19,38 @@ const getFloorPrice = async () => {
   return `${floorPrice} ETH`;
 };
 
+const commands = [{
+  name: 'floor',
+  description: 'Show current land floor price'
+}]; 
+
+const rest = new REST({ version: '9' }).setToken(DISCORD_TOKEN);
+
+(async () => {
+  try {
+    console.log('Started refreshing application (/) commands.');
+
+    await rest.put(
+      Routes.applicationGuildCommands('887116641442357289', '882367467022868570'),
+      { body: commands },
+    );
+
+    console.log('Successfully reloaded application (/) commands.');
+  } catch (error) {
+    console.error(error);
+  }
+})();
+
 client.on('ready', () => {
   console.log(`Logged in as ${client.user.tag}!`);
+});
+
+client.on('interactionCreate', async (interaction) => {
+  if (!interaction.isCommand()) return;
+
+  if (interaction.commandName === 'floor') {
+    await interaction.reply(await getFloorPrice());
+  }
 });
 
 client.login(DISCORD_TOKEN);
