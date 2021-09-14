@@ -1,8 +1,10 @@
 require('dotenv').config()
 
-const { DISCORD_TOKEN, REFRESH_TIMER } = process.env
-
 const axios = require('axios')
+const { Client, Intents } = require('discord.js');
+const client = new Client({ intents: [Intents.FLAGS.GUILDS] });
+
+const { DISCORD_TOKEN, REFRESH_TIMER } = process.env
 
 const getFloorPrice = async () => {
   const floorPrice = (
@@ -13,3 +15,9 @@ const getFloorPrice = async () => {
 
   return `${floorPrice} ETH`;
 };
+
+client.on('ready', () => {
+  console.log(`Logged in as ${client.user.tag}!`);
+});
+
+client.login(DISCORD_TOKEN);
