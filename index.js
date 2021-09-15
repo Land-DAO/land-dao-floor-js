@@ -43,6 +43,11 @@ const rest = new REST({ version: '9' }).setToken(DISCORD_TOKEN);
 
 client.on('ready', () => {
   console.log(`Logged in as ${client.user.tag}!`);
+
+  // Fetch floor price and set as bot activity/status
+  setInterval(async () => {
+    client.user.setActivity(await getFloorPrice(), {type: 'WATCHING'});
+  }, REFRESH_TIMER || 3600000);
 });
 
 client.on('interactionCreate', async (interaction) => {
