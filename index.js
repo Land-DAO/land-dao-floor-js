@@ -41,10 +41,13 @@ const rest = new REST({ version: '9' }).setToken(DISCORD_TOKEN);
   }
 })();
 
-client.on('ready', () => {
+client.on('ready', async () => {
   console.log(`Logged in as ${client.user.tag}!`);
 
   // Fetch floor price and set as bot activity/status
+  client.user.setActivity(await getFloorPrice(), {type: 'WATCHING'});
+
+  // Set status at set intervals
   setInterval(async () => {
     client.user.setActivity(await getFloorPrice(), {type: 'WATCHING'});
   }, REFRESH_TIMER || 3600000);
